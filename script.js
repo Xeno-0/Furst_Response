@@ -1,5 +1,5 @@
 let currentLanguage = "en";
-const GEMINI_API_KEY = "AIzaSyCUkfX3Mif7SrBuQ4xsQ3ba2M9uq4-sYVk";
+const GEMINI_API_KEY = "AIzaSyCD6qh_wlI2O7pbjLgOYd2MfRbYhwOSXjw";
 
 // Base URL for API calls (adjust if needed)
 const API_BASE_URL = '';
@@ -620,3 +620,4 @@ function initializeVetsPage() {
     changeLanguage(currentLanguage);
   }
 }
+
