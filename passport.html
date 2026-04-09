@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furst Response | Dog Health Passport</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo"><img src="Images/Logo.png" width="175" alt="Logo-img" /></a>
+      <ul class="nav-links">
+        <li><a href="index.html#diagnosis" class="nav-link" data-en="Quick Diagnosis" data-hi="त्वरित निदान">Quick Diagnosis</a></li>
+        <li><a href="passport.html" class="nav-link active" data-en="Health Passport" data-hi="हेल्थ पासपोर्ट">Health Passport</a></li>
+        <li><a href="expert.html" class="nav-link" data-en="Expert Advice" data-hi="विशेषज्ञ सलाह">Expert Advice</a></li>
+        <li><a href="vets.html" class="nav-link" data-en="Vets Near You" data-hi="आपके पास पशु चिकित्सक">Vets Near You</a></li>
+      </ul>
+      <button class="translate-btn" id="translateBtn"><i class="fas fa-language"></i><span class="translate-text" data-en="Translate" data-hi="अनुवाद करें">Translate</span></button>
+    </div>
+  </header>
+
+  <section class="page-hero page-hero-passport">
+    <div class="container page-hero-layout">
+      <div class="page-hero-copy">
+        <span class="page-pill chip-medium" data-en="Local Storage First" data-hi="पहले लोकल स्टोरेज">Local Storage First</span>
+        <h1 data-en="Build Your Dog's Health Passport" data-hi="अपने कुत्ते का हेल्थ पासपोर्ट बनाएं">Build Your Dog's Health Passport</h1>
+        <p data-en="Keep identity, allergies, medication, behavior, and clinic preferences in one polished profile that can personalize diagnosis and speed up emergency care."
+          data-hi="पहचान, एलर्जी, दवाएं, व्यवहार और क्लिनिक पसंद को एक सलीकेदार प्रोफाइल में रखें जो निदान को व्यक्तिगत बनाए और इमरजेंसी केयर को तेज करे।">
+          Keep identity, allergies, medication, behavior, and clinic preferences in one polished profile that can personalize diagnosis and speed up emergency care.
+        </p>
+      </div>
+      <div class="page-hero-panel">
+        <div class="page-hero-icon" aria-hidden="true"><i class="fas fa-id-card"></i></div>
+        <span class="page-hero-panel-label" data-en="Inside The Passport" data-hi="पासपोर्ट के अंदर">Inside The Passport</span>
+        <ul class="page-hero-list">
+          <li><i class="fas fa-user"></i><span data-en="Identity, weight, and contact details" data-hi="पहचान, वजन और संपर्क विवरण">Identity, weight, and contact details</span></li>
+          <li><i class="fas fa-capsules"></i><span data-en="Allergies, medications, and chronic conditions" data-hi="एलर्जी, दवाएं और क्रॉनिक स्थितियां">Allergies, medications, and chronic conditions</span></li>
+          <li><i class="fas fa-house-medical"></i><span data-en="Preferred clinic and care notes for faster triage" data-hi="तेज ट्रायाज के लिए पसंदीदा क्लिनिक और केयर नोट्स">Preferred clinic and care notes for faster triage</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-shell section visible-section">
+    <div class="container page-shell-grid">
+      <div class="page-card">
+        <div class="page-card-header">
+          <div class="page-card-heading">
+            <span class="page-card-kicker" data-en="At A Glance" data-hi="एक नजर में">At A Glance</span>
+            <h2 data-en="Passport Summary" data-hi="पासपोर्ट सारांश">Passport Summary</h2>
+            <p class="page-muted" data-en="This profile is stored locally on this device unless you add backend sync later." data-hi="यह प्रोफाइल इस डिवाइस पर लोकली स्टोर होती है जब तक आप बाद में बैकएंड सिंक न जोड़ें।">This profile is stored locally on this device unless you add backend sync later.</p>
+          </div>
+          <img id="passportPhotoPreview" class="photo-preview" alt="Dog profile" />
+        </div>
+        <div id="passportSummary" class="summary-sheet"></div>
+        <div class="page-actions">
+          <a href="index.html#diagnosis" class="btn" data-en="Use In Diagnosis" data-hi="निदान में उपयोग करें">Use In Diagnosis</a>
+          <a href="handoff.html" class="btn btn-ghost" data-en="Open Vet Summary" data-hi="वेट सारांश खोलें">Open Vet Summary</a>
+        </div>
+      </div>
+
+      <div class="page-card">
+        <div class="page-card-header">
+          <div class="page-card-heading">
+            <span class="page-card-kicker" data-en="Edit Details" data-hi="विवरण संपादित करें">Edit Details</span>
+            <h2 data-en="Profile Details" data-hi="प्रोफाइल विवरण">Profile Details</h2>
+            <p class="page-muted" data-en="Required identity fields are light; the medical fields can stay partial and still save." data-hi="ज़रूरी पहचान फ़ील्ड हल्के हैं; मेडिकल फ़ील्ड अधूरे हों तब भी सेव हो सकते हैं।">Required identity fields are light; the medical fields can stay partial and still save.</p>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="btn btn-ghost btn-small-inline" id="editPassportBtn" data-en="Edit" data-hi="संपादित करें">Edit</button>
+            <button type="button" class="btn btn-ghost btn-small-inline" id="resetPassportBtn" data-en="Reset" data-hi="रीसेट">Reset</button>
+          </div>
+        </div>
+        <form id="passportForm">
+          <div class="field-grid">
+            <div class="form-group"><label for="dogName" data-en="Dog Name" data-hi="कुत्ते का नाम">Dog Name</label><input id="dogName" required /></div>
+            <div class="form-group"><label for="breed" data-en="Breed" data-hi="नस्ल">Breed</label><input id="breed" required /></div>
+            <div class="form-group"><label for="age" data-en="Age (years)" data-hi="उम्र (वर्ष)">Age (years)</label><input id="age" type="number" min="0" step="0.1" /></div>
+            <div class="form-group"><label for="sex" data-en="Sex" data-hi="लिंग">Sex</label><select id="sex"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+            <div class="form-group"><label for="weight" data-en="Weight (kg)" data-hi="वजन (किलो)">Weight (kg)</label><input id="weight" type="number" min="0" step="0.1" /></div>
+            <div class="form-group"><label for="neuteredStatus" data-en="Neutered / Spayed" data-hi="न्यूटर्ड / स्पेड">Neutered / Spayed</label><select id="neuteredStatus"><option value="">Select</option><option value="Yes">Yes</option><option value="No">No</option><option value="Unknown">Unknown</option></select></div>
+            <div class="form-group"><label for="emergencyContact" data-en="Emergency Contact" data-hi="इमरजेंसी संपर्क">Emergency Contact</label><input id="emergencyContact" /></div>
+            <div class="form-group"><label for="preferredClinic" data-en="Preferred Clinic" data-hi="पसंदीदा क्लिनिक">Preferred Clinic</label><input id="preferredClinic" list="clinicOptions" /></div>
+            <div class="form-group"><label for="photoUrl" data-en="Photo URL" data-hi="फोटो URL">Photo URL</label><input id="photoUrl" type="url" /></div>
+            <div class="form-group"><label for="photoUpload" data-en="Photo Upload" data-hi="फोटो अपलोड">Photo Upload</label><input id="photoUpload" type="file" accept="image/*" /></div>
+          </div>
+          <div class="form-group"><label for="allergies" data-en="Allergies" data-hi="एलर्जी">Allergies</label><textarea id="allergies" rows="2"></textarea></div>
+          <div class="form-group"><label for="medications" data-en="Current Medications" data-hi="चल रही दवाएं">Current Medications</label><textarea id="medications" rows="2"></textarea></div>
+          <div class="form-group"><label for="chronicConditions" data-en="Chronic Conditions" data-hi="क्रॉनिक स्थितियां">Chronic Conditions</label><textarea id="chronicConditions" rows="2"></textarea></div>
+          <div class="form-group"><label for="vaccinationStatus" data-en="Vaccination Status" data-hi="टीकाकरण स्थिति">Vaccination Status</label><textarea id="vaccinationStatus" rows="2"></textarea></div>
+          <div class="form-group"><label for="feedingNotes" data-en="Feeding Notes" data-hi="फीडिंग नोट्स">Feeding Notes</label><textarea id="feedingNotes" rows="2"></textarea></div>
+          <div class="form-group"><label for="behavioralNotes" data-en="Behavioral Notes" data-hi="व्यवहार संबंधी नोट्स">Behavioral Notes</label><textarea id="behavioralNotes" rows="2"></textarea></div>
+          <p id="passportFormStatus" class="privacy-note"></p>
+          <div class="passport-form-actions">
+            <button type="submit" class="btn" data-en="Save Passport" data-hi="पासपोर्ट सेव करें">Save Passport</button>
+            <button type="button" class="btn btn-ghost" id="clearPassportBtn" data-en="Clear Saved Profile" data-hi="सेव प्रोफाइल हटाएं">Clear Saved Profile</button>
+          </div>
+        </form>
+        <datalist id="clinicOptions"></datalist>
+      </div>
+    </div>
+  </section>
+
+  <footer><div class="container"><p class="footer-text" data-en="Providing immediate healthcare guidance for your doggos." data-hi="तत्काल डॉग हेल्थकेयर गाइडेंस प्रदान करना।">Providing immediate healthcare guidance for your doggos.</p><div class="copyright">&copy; 2025 Vansh Vashist. <span data-en="All rights reserved." data-hi="सर्वाधिकार सुरक्षित।">All rights reserved.</span> <span data-en="Made with care and lots of coffee." data-hi="देखभाल और बहुत सारी कॉफी के साथ बनाया गया।">Made with care and lots of coffee.</span></div></div></footer>
+
+  <div class="modal-overlay" id="languageModal"><div class="modal"><h3 class="modal-title" data-en="Select Language" data-hi="भाषा चुनें">Select Language</h3><div class="lang-options"><div class="lang-option" data-lang="en"><span class="lang-option-code">EN</span><p data-en="English" data-hi="अंग्रेज़ी">English</p></div><div class="lang-option" data-lang="hi"><span class="lang-option-code">HI</span><p data-en="Hindi" data-hi="हिंदी">Hindi</p></div></div></div></div>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+  <script src="passport.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furst Response | Vet Handoff Summary</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header><div class="container header-container"><a href="index.html" class="logo"><img src="Images/Logo.png" width="175" alt="Logo-img" /></a><ul class="nav-links"><li><a href="index.html#diagnosis" class="nav-link" data-en="Quick Diagnosis" data-hi="त्वरित निदान">Quick Diagnosis</a></li><li><a href="passport.html" class="nav-link" data-en="Health Passport" data-hi="हेल्थ पासपोर्ट">Health Passport</a></li><li><a href="emergency.html" class="nav-link" data-en="Emergency Mode" data-hi="इमरजेंसी मोड">Emergency Mode</a></li><li><a href="vets.html" class="nav-link" data-en="Vets Near You" data-hi="आपके पास पशु चिकित्सक">Vets Near You</a></li><li><a href="handoff.html" class="nav-link active" data-en="Vet Summary" data-hi="वेट सारांश">Vet Summary</a></li></ul><button class="translate-btn" id="translateBtn"><i class="fas fa-language"></i><span class="translate-text" data-en="Translate" data-hi="अनुवाद करें">Translate</span></button></div></header>
+  <section class="page-hero page-hero-handoff">
+    <div class="container page-hero-layout">
+      <div class="page-hero-copy">
+        <span class="page-pill chip-low" data-en="Printable" data-hi="प्रिंटेबल">Printable</span>
+        <h1 data-en="AI-to-Vet Handoff Summary" data-hi="AI-टू-वेट हैंडऑफ सारांश">AI-to-Vet Handoff Summary</h1>
+        <p data-en="A clean summary object normalizes the latest diagnosis, your dog's passport, and nearby clinics into something you can actually show a veterinarian."
+          data-hi="एक साफ सारांश ऑब्जेक्ट नवीनतम निदान, आपके कुत्ते का पासपोर्ट और पास के क्लिनिक को इस तरह व्यवस्थित करता है जिसे आप वास्तव में किसी वेट को दिखा सकें।">
+          A clean summary object normalizes the latest diagnosis, your dog's passport, and nearby clinics into something you can actually show a veterinarian.
+        </p>
+      </div>
+      <div class="page-hero-panel">
+        <div class="page-hero-icon" aria-hidden="true"><i class="fas fa-clipboard-list"></i></div>
+        <span class="page-hero-panel-label" data-en="Ready To Share" data-hi="शेयर करने के लिए तैयार">Ready To Share</span>
+        <ul class="page-hero-list">
+          <li><i class="fas fa-file-lines"></i><span data-en="Readable symptoms and AI assessment in one sheet" data-hi="एक शीट में पढ़ने योग्य लक्षण और AI आकलन">Readable symptoms and AI assessment in one sheet</span></li>
+          <li><i class="fas fa-copy"></i><span data-en="Copy or print without rewriting the whole story" data-hi="पूरी कहानी दोबारा लिखे बिना कॉपी या प्रिंट करें">Copy or print without rewriting the whole story</span></li>
+          <li><i class="fas fa-stethoscope"></i><span data-en="Pulls in passport and nearby clinic context automatically" data-hi="पासपोर्ट और पास के क्लिनिक का संदर्भ अपने आप जोड़ता है">Pulls in passport and nearby clinic context automatically</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="page-shell section visible-section">
+    <div class="container page-shell-grid">
+      <div class="summary-sheet" id="handoffSheet"></div>
+
+      <div class="page-card">
+        <div class="page-card-header">
+          <div class="page-card-heading">
+            <span class="page-card-kicker" data-en="Share Options" data-hi="शेयर विकल्प">Share Options</span>
+            <h2 data-en="Actions" data-hi="एक्शन">Actions</h2>
+            <p class="page-muted" id="handoffTimestamp"></p>
+          </div>
+        </div>
+        <div class="print-actions">
+          <button class="btn" id="copySummaryBtn" data-en="Copy Summary" data-hi="सारांश कॉपी करें">Copy Summary</button>
+          <button class="btn btn-ghost" id="printSummaryBtn" data-en="Print Summary" data-hi="सारांश प्रिंट करें">Print Summary</button>
+          <a href="emergency.html" id="emergencyLink" class="btn btn-secondary" data-en="Open Emergency Mode" data-hi="इमरजेंसी मोड खोलें">Open Emergency Mode</a>
+        </div>
+        <div class="summary-block">
+          <h3 data-en="Recent Summaries" data-hi="हाल के सारांश">Recent Summaries</h3>
+          <div id="handoffHistory" class="history-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container page-stack">
+      <div id="handoffEmptyState" class="empty-state" hidden>
+        <h3 data-en="No summary available yet" data-hi="अभी कोई सारांश उपलब्ध नहीं है">No summary available yet</h3>
+        <p data-en="Run a diagnosis first or open this page from Emergency Mode." data-hi="पहले निदान चलाएं या यह पेज इमरजेंसी मोड से खोलें।">Run a diagnosis first or open this page from Emergency Mode.</p>
+        <a href="index.html#diagnosis" class="btn" data-en="Go To Diagnosis" data-hi="निदान पर जाएं">Go To Diagnosis</a>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><p class="footer-text" data-en="Providing immediate healthcare guidance for your doggos." data-hi="तत्काल डॉग हेल्थकेयर गाइडेंस प्रदान करना।">Providing immediate healthcare guidance for your doggos.</p><div class="copyright">&copy; 2025 Vansh Vashist. <span data-en="All rights reserved." data-hi="सर्वाधिकार सुरक्षित।">All rights reserved.</span> <span data-en="Made with care and lots of coffee." data-hi="देखभाल और बहुत सारी कॉफी के साथ बनाया गया।">Made with care and lots of coffee.</span></div></div></footer>
+  <div class="modal-overlay" id="languageModal"><div class="modal"><h3 class="modal-title" data-en="Select Language" data-hi="भाषा चुनें">Select Language</h3><div class="lang-options"><div class="lang-option" data-lang="en"><span class="lang-option-code">EN</span><p data-en="English" data-hi="अंग्रेज़ी">English</p></div><div class="lang-option" data-lang="hi"><span class="lang-option-code">HI</span><p data-en="Hindi" data-hi="हिंदी">Hindi</p></div></div></div></div>
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+  <script src="handoff.js"></script>
+</body>
+</html>

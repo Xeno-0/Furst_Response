@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furst Response | Emergency Mode</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header><div class="container header-container"><a href="index.html" class="logo"><img src="Images/Logo.png" width="175" alt="Logo-img" /></a><ul class="nav-links"><li><a href="index.html#diagnosis" class="nav-link" data-en="Quick Diagnosis" data-hi="त्वरित निदान">Quick Diagnosis</a></li><li><a href="passport.html" class="nav-link" data-en="Health Passport" data-hi="हेल्थ पासपोर्ट">Health Passport</a></li><li><a href="vets.html" class="nav-link" data-en="Vets Near You" data-hi="आपके पास पशु चिकित्सक">Vets Near You</a></li><li><a href="handoff.html" class="nav-link" data-en="Vet Summary" data-hi="वेट सारांश">Vet Summary</a></li><li><a href="emergency.html" class="nav-link active" data-en="Emergency Mode" data-hi="इमरजेंसी मोड">Emergency Mode</a></li></ul><button class="translate-btn" id="translateBtn"><i class="fas fa-language"></i><span class="translate-text" data-en="Translate" data-hi="अनुवाद करें">Translate</span></button></div></header>
+  <section class="page-hero page-hero-emergency">
+    <div class="container page-hero-layout">
+      <div class="page-hero-copy">
+        <span class="page-pill chip-high" data-en="Urgent Care Branch" data-hi="अर्जेंट केयर ब्रांच">Urgent Care Branch</span>
+        <h1 data-en="Emergency Mode" data-hi="इमरजेंसी मोड">Emergency Mode</h1>
+        <p data-en="Use this focused page for higher-risk cases: keep the latest symptoms, AI assessment, clinic actions, and handoff summary together while you get ready to leave."
+          data-hi="उच्च-जोखिम मामलों के लिए इस फोकस्ड पेज का उपयोग करें: निकलने की तैयारी करते समय नवीनतम लक्षण, AI आकलन, क्लिनिक एक्शन और हैंडऑफ सारांश एक साथ रखें।">
+          Use this focused page for higher-risk cases: keep the latest symptoms, AI assessment, clinic actions, and handoff summary together while you get ready to leave.
+        </p>
+      </div>
+      <div class="page-hero-panel">
+        <div class="page-hero-icon" aria-hidden="true"><i class="fas fa-suitcase-medical"></i></div>
+        <span class="page-hero-panel-label" data-en="Emergency Checklist" data-hi="इमरजेंसी चेकलिस्ट">Emergency Checklist</span>
+        <ul class="page-hero-list">
+          <li><i class="fas fa-phone-volume"></i><span data-en="Call the clinic before you leave when symptoms are worsening" data-hi="लक्षण बिगड़ रहे हों तो निकलने से पहले क्लिनिक को कॉल करें">Call the clinic before you leave when symptoms are worsening</span></li>
+          <li><i class="fas fa-location-dot"></i><span data-en="Use fast directions instead of searching from scratch" data-hi="नई खोज के बजाय तेज दिशानिर्देश उपयोग करें">Use fast directions instead of searching from scratch</span></li>
+          <li><i class="fas fa-file-lines"></i><span data-en="Carry the AI-to-vet summary with the current case" data-hi="मौजूदा केस के साथ AI-टू-वेट सारांश रखें">Carry the AI-to-vet summary with the current case</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="page-shell section visible-section">
+    <div class="container page-shell-grid">
+      <div class="page-card">
+        <div class="page-card-header">
+          <div class="page-card-heading">
+            <span class="page-card-kicker" data-en="Act Fast" data-hi="जल्दी करें">Act Fast</span>
+            <h2 data-en="Rapid Contacts" data-hi="तेज़ संपर्क">Rapid Contacts</h2>
+            <p class="page-muted" data-en="Call first, then head out if your dog is unstable or worsening." data-hi="अगर आपका कुत्ता अस्थिर है या हालत बिगड़ रही है तो पहले कॉल करें, फिर निकलें।">Call first, then head out if your dog is unstable or worsening.</p>
+          </div>
+          <div class="page-actions">
+            <a id="handoffLink" href="handoff.html" class="btn" data-en="Create Vet Summary" data-hi="वेट सारांश बनाएं">Create Vet Summary</a>
+            <a href="vets.html" class="btn btn-ghost" data-en="Full Vet Locator" data-hi="पूरा वेट लोकेटर">Full Vet Locator</a>
+          </div>
+        </div>
+        <div id="emergencyContacts" class="clinic-stack"></div>
+      </div>
+
+      <div class="page-card">
+        <div class="page-card-header">
+          <div class="page-card-heading">
+            <span class="page-card-kicker" data-en="Current Case" data-hi="मौजूदा केस">Current Case</span>
+            <h2 data-en="Current Emergency Case" data-hi="मौजूदा इमरजेंसी केस">Current Emergency Case</h2>
+            <p class="page-muted" id="emergencyTimestamp"></p>
+          </div>
+          <span id="emergencySeverity" class="page-pill chip-high"></span>
+        </div>
+        <div id="emergencyMeta" class="detail-list"></div>
+        <p class="safety-note" data-en="Emergency Mode gives conservative support only. It does not replace hands-on veterinary examination, emergency transport, or clinic instructions." data-hi="इमरजेंसी मोड केवल सतर्क सहायता देता है। यह हाथों-हाथ वेट जांच, इमरजेंसी ट्रांसपोर्ट या क्लिनिक निर्देशों का विकल्प नहीं है।">Emergency Mode gives conservative support only. It does not replace hands-on veterinary examination, emergency transport, or clinic instructions.</p>
+      </div>
+    </div>
+
+    <div class="container page-stack">
+      <div class="guidance-grid">
+        <div class="guidance-block">
+          <h3 data-en="Possible issue" data-hi="संभावित समस्या">Possible issue</h3>
+          <p id="possibleIssue"></p>
+        </div>
+        <div class="guidance-block">
+          <h3 data-en="How urgent this is" data-hi="यह कितना अर्जेंट है">How urgent this is</h3>
+          <p id="urgencyLevel"></p>
+        </div>
+        <div class="guidance-block">
+          <h3 data-en="What to do right now" data-hi="अभी क्या करें">What to do right now</h3>
+          <div id="doNowList" class="summary-list"></div>
+        </div>
+        <div class="guidance-block">
+          <h3 data-en="What not to do" data-hi="क्या न करें">What not to do</h3>
+          <div id="avoidList" class="summary-list"></div>
+        </div>
+      </div>
+
+      <div class="page-card page-card-plain">
+        <span class="page-card-kicker" data-en="Next Move" data-hi="अगला कदम">Next Move</span>
+        <h3 data-en="When to leave for a vet" data-hi="वेट के लिए कब निकलें">When to leave for a vet</h3>
+        <p id="leaveForVet"></p>
+      </div>
+
+      <div id="emergencyEmptyState" class="empty-state" hidden>
+        <h3 data-en="No urgent case saved yet" data-hi="अभी कोई अर्जेंट केस सेव नहीं है">No urgent case saved yet</h3>
+        <p data-en="Run a diagnosis first, or open this page after a medium or high-severity result." data-hi="पहले निदान चलाएं, या मीडियम या हाई-सीवेरिटी रिज़ल्ट के बाद यह पेज खोलें।">Run a diagnosis first, or open this page after a medium or high-severity result.</p>
+        <a href="index.html#diagnosis" class="btn" data-en="Go To Diagnosis" data-hi="निदान पर जाएं">Go To Diagnosis</a>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><p class="footer-text" data-en="Providing immediate healthcare guidance for your doggos." data-hi="तत्काल डॉग हेल्थकेयर गाइडेंस प्रदान करना।">Providing immediate healthcare guidance for your doggos.</p><div class="copyright">&copy; 2025 Vansh Vashist. <span data-en="All rights reserved." data-hi="सर्वाधिकार सुरक्षित।">All rights reserved.</span> <span data-en="Made with care and lots of coffee." data-hi="देखभाल और बहुत सारी कॉफी के साथ बनाया गया।">Made with care and lots of coffee.</span></div></div></footer>
+  <div class="modal-overlay" id="languageModal"><div class="modal"><h3 class="modal-title" data-en="Select Language" data-hi="भाषा चुनें">Select Language</h3><div class="lang-options"><div class="lang-option" data-lang="en"><span class="lang-option-code">EN</span><p data-en="English" data-hi="अंग्रेज़ी">English</p></div><div class="lang-option" data-lang="hi"><span class="lang-option-code">HI</span><p data-en="Hindi" data-hi="हिंदी">Hindi</p></div></div></div></div>
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

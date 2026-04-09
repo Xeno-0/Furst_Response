@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -124,3 +125,131 @@
 </body>
 
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Furst Response | Veterinarian Near You</title>
+    <meta name="description"
+        content="Find trusted veterinary clinics near you. Get directions and contact information for veterinarians across India." />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="Images/Logo.png" width="175" alt="Logo-img" />
+            </a>
+
+            <ul class="nav-links">
+                <li>
+                    <a href="index.html#diagnosis" class="nav-link"
+                        data-en="Quick Diagnosis" data-hi="त्वरित निदान">Quick Diagnosis</a>
+                </li>
+                <li>
+                    <a href="expert.html" class="nav-link" data-en="Expert Advice" data-hi="विशेषज्ञ सलाह">Expert
+                        Advice</a>
+                </li>
+                <li>
+                    <a href="index.html#tips" class="nav-link" data-en="Health Tips" data-hi="स्वास्थ्य सुझाव">Health
+                        Tips</a>
+                </li>
+                <li>
+                    <a href="vets.html" class="nav-link active" data-en="Vets Near You"
+                        data-hi="आपके पास पशु चिकित्सक">Vets Near You</a>
+                </li>
+                <li>
+                    <a href="index.html#feedback" class="nav-link" data-en="Feedback" data-hi="प्रतिक्रिया">Feedback</a>
+                </li>
+            </ul>
+
+            <button class="translate-btn" id="translateBtn">
+                <i class="fas fa-language"></i>
+                <span class="translate-text" data-en="Translate" data-hi="अनुवाद करें">Translate</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="vets-hero">
+        <div class="container hero-content">
+            <h1 class="hero-title" data-en="Find a Veterinarian Near You" data-hi="अपने पास एक पशु चिकित्सक खोजें">
+                Find a Veterinarian Near You
+            </h1>
+            <p class="hero-subtitle" data-en="Locate trusted veterinary clinics around you instantly."
+                data-hi="तुरंत अपने आसपास विश्वसनीय पशु चिकित्सा क्लिनिक खोजें।">
+                Locate trusted veterinary clinics around you instantly.
+            </p>
+        </div>
+    </section>
+
+    <section id="vets" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="section-heading" data-en="Veterinary Clinics" data-hi="पशु चिकित्सा क्लिनिक">
+                    Veterinary Clinics
+                </h2>
+                <p class="section-desc"
+                    data-en="Click a marker on the map or browse the list below to find clinic details"
+                    data-hi="क्लिनिक विवरण खोजने के लिए मानचित्र पर मार्कर क्लिक करें या नीचे दी गई सूची देखें।">
+                    Click a marker on the map or browse the list below to find clinic
+                    details
+                </p>
+            </div>
+
+            <div id="vet-map"></div>
+
+            <div class="clinic-list" id="clinicList">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p class="footer-text" data-en="Providing immediate healthcare guidance for your doggos."
+                data-hi="तत्काल डॉग हेल्थकेयर गाइडेंस प्रदान करना।">
+                Providing immediate healthcare guidance for your doggos.
+            </p>
+
+            <div class="copyright">
+                &copy; 2025 Vansh Vashist.
+                <span data-en="All rights reserved." data-hi="सर्वाधिकार सुरक्षित।">All rights reserved.</span>
+                <span data-en="Made with care and lots of coffee." data-hi="देखभाल और बहुत सारी कॉफी के साथ बनाया गया।">Made
+                    with care and lots of coffee.</span>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="languageModal">
+        <div class="modal">
+            <h3 class="modal-title" data-en="Select Language" data-hi="भाषा चुनें">
+                Select Language
+            </h3>
+            <div class="lang-options">
+                <div class="lang-option" data-lang="en">
+                    <span class="lang-option-code">EN</span>
+                    <p data-en="English" data-hi="अंग्रेज़ी">English</p>
+                </div>
+                <div class="lang-option" data-lang="hi">
+                    <span class="lang-option-code">HI</span>
+                    <p data-en="Hindi" data-hi="हिंदी">Hindi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="site-config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
+>>>>>>> babf504 (Furst Response 2.0)
