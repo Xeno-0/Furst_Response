@@ -16,6 +16,12 @@ Recommended variables:
 
 `GROQ_MODEL=llama-3.3-70b-versatile`
 
+Also accepted as fallback names:
+
+`API_KEY`
+
+`MODEL_NAME`
+
 ## Local run
 
 1. Open `FRBackend/.env` and paste the key and model.
@@ -35,3 +41,5 @@ Example:
 `backendBaseUrl: "https://your-backend.onrender.com"`
 
 The API key still stays only in `FRBackend/.env` on that backend host.
+
+If Render still shows a missing-key error, open `/api/health` on your deployed backend and confirm `aiConfigured` is `true`.

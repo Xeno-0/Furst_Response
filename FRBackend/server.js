@@ -1,8 +1,7 @@
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -33,10 +32,10 @@ function inferProvider() {
     return explicitProvider;
   }
 
-  const groqKey = readNonEmptyEnv("GROQ_API_KEY");
-  const groqModel = readNonEmptyEnv("GROQ_MODEL");
-  const fallbackKey = readNonEmptyEnv("GEMINI_API_KEY", "AI_API_KEY");
-  const fallbackModel = readNonEmptyEnv("GEMINI_MODEL", "AI_MODEL");
+  const groqKey = readNonEmptyEnv("GROQ_API_KEY", "GROQ_KEY", "API_KEY", "AI_API_KEY");
+  const groqModel = readNonEmptyEnv("GROQ_MODEL", "MODEL_NAME", "MODEL", "AI_MODEL");
+  const fallbackKey = readNonEmptyEnv("GEMINI_API_KEY", "API_KEY", "AI_API_KEY");
+  const fallbackModel = readNonEmptyEnv("GEMINI_MODEL", "MODEL_NAME", "MODEL", "AI_MODEL");
 
   if (
     groqKey ||
@@ -56,15 +55,29 @@ function getAiConfig() {
   if (provider === "groq") {
     return {
       provider,
-      apiKey: readNonEmptyEnv("GROQ_API_KEY", "AI_API_KEY", "GEMINI_API_KEY"),
-      model: readNonEmptyEnv("GROQ_MODEL", "AI_MODEL", "GEMINI_MODEL") || "llama-3.3-70b-versatile",
+      apiKey: readNonEmptyEnv("GROQ_API_KEY", "GROQ_KEY", "API_KEY", "AI_API_KEY", "GEMINI_API_KEY"),
+      model: readNonEmptyEnv("GROQ_MODEL", "GROQ_MODEL_NAME", "MODEL_NAME", "MODEL", "AI_MODEL", "GEMINI_MODEL") || "llama-3.3-70b-versatile",
     };
   }
 
   return {
     provider: "gemini",
-    apiKey: readNonEmptyEnv("GEMINI_API_KEY", "AI_API_KEY"),
-    model: readNonEmptyEnv("GEMINI_MODEL", "AI_MODEL") || "gemini-2.5-flash",
+    apiKey: readNonEmptyEnv("GEMINI_API_KEY", "API_KEY", "AI_API_KEY"),
+    model: readNonEmptyEnv("GEMINI_MODEL", "MODEL_NAME", "MODEL", "AI_MODEL") || "gemini-2.5-flash",
+  };
+}
+
+function getExpectedEnvNames(provider) {
+  if (provider === "groq") {
+    return {
+      key: ["GROQ_API_KEY", "GROQ_KEY", "API_KEY", "AI_API_KEY", "GEMINI_API_KEY"],
+      model: ["GROQ_MODEL", "GROQ_MODEL_NAME", "MODEL_NAME", "MODEL", "AI_MODEL", "GEMINI_MODEL"],
+    };
+  }
+
+  return {
+    key: ["GEMINI_API_KEY", "API_KEY", "AI_API_KEY"],
+    model: ["GEMINI_MODEL", "MODEL_NAME", "MODEL", "AI_MODEL"],
   };
 }
 
@@ -176,11 +189,13 @@ app.use(express.static(projectRoot));
 
 app.get("/api/health", (req, res) => {
   const config = getAiConfig();
+  const expectedEnvNames = getExpectedEnvNames(config.provider);
   res.json({
     ok: true,
     provider: config.provider,
     model: config.model,
     aiConfigured: hasConfiguredApiKey(),
+    envHints: expectedEnvNames,
   });
 });
 
@@ -193,10 +208,12 @@ app.post("/api/chat", async (req, res) => {
   }
 
   if (!hasConfiguredApiKey()) {
+    const expectedEnvNames = getExpectedEnvNames(config.provider);
     return res.status(500).json({
       error: "AI API key is missing on the server.",
-      details: `Set the ${config.provider === "groq" ? "GROQ_API_KEY" : "GEMINI_API_KEY"} environment variable on the backend.`,
+      details: `Set one of these backend environment variables: ${expectedEnvNames.key.join(", ")}.`,
       provider: config.provider,
+      envHints: expectedEnvNames,
     });
   }
 
