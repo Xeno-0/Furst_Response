@@ -6,8 +6,6 @@ const path = require("path");
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
-const GEMINI_API_KEY = (process.env.GEMINI_API_KEY || "").trim();
-const GEMINI_MODEL = (process.env.GEMINI_MODEL || "gemini-2.5-flash").trim();
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -18,8 +16,61 @@ let savedAdvice = [];
 
 const projectRoot = path.resolve(__dirname, "..");
 
-function hasConfiguredGeminiKey() {
-  return Boolean(GEMINI_API_KEY) && !/^paste[-_\s]?/i.test(GEMINI_API_KEY);
+function readNonEmptyEnv(...names) {
+  for (const name of names) {
+    const value = typeof process.env[name] === "string" ? process.env[name].trim() : "";
+    if (value) {
+      return value;
+    }
+  }
+
+  return "";
+}
+
+function inferProvider() {
+  const explicitProvider = readNonEmptyEnv("AI_PROVIDER", "LLM_PROVIDER").toLowerCase();
+  if (explicitProvider) {
+    return explicitProvider;
+  }
+
+  const groqKey = readNonEmptyEnv("GROQ_API_KEY");
+  const groqModel = readNonEmptyEnv("GROQ_MODEL");
+  const fallbackKey = readNonEmptyEnv("GEMINI_API_KEY", "AI_API_KEY");
+  const fallbackModel = readNonEmptyEnv("GEMINI_MODEL", "AI_MODEL");
+
+  if (
+    groqKey ||
+    groqModel ||
+    /^gsk_/i.test(fallbackKey) ||
+    /llama|mixtral|deepseek|qwen/i.test(fallbackModel)
+  ) {
+    return "groq";
+  }
+
+  return "gemini";
+}
+
+function getAiConfig() {
+  const provider = inferProvider();
+
+  if (provider === "groq") {
+    return {
+      provider,
+      apiKey: readNonEmptyEnv("GROQ_API_KEY", "AI_API_KEY", "GEMINI_API_KEY"),
+      model: readNonEmptyEnv("GROQ_MODEL", "AI_MODEL", "GEMINI_MODEL") || "llama-3.3-70b-versatile",
+    };
+  }
+
+  return {
+    provider: "gemini",
+    apiKey: readNonEmptyEnv("GEMINI_API_KEY", "AI_API_KEY"),
+    model: readNonEmptyEnv("GEMINI_MODEL", "AI_MODEL") || "gemini-2.5-flash",
+  };
+}
+
+function hasConfiguredApiKey() {
+  const { apiKey } = getAiConfig();
+  return Boolean(apiKey) && !/^paste[-_\s]?/i.test(apiKey);
 }
 
 function corsOptionsDelegate(req, callback) {
@@ -77,61 +128,103 @@ function expertAdvicePayload() {
   };
 }
 
+async function requestGroqChat(prompt, config) {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${config.apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: 0.3,
+    }),
+  });
+
+  const data = await response.json();
+  return { response, data };
+}
+
+async function requestGeminiChat(prompt, config) {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": config.apiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+      }),
+    }
+  );
+
+  const data = await response.json();
+  return { response, data };
+}
+
 app.use(cors(corsOptionsDelegate));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(projectRoot));
 
 app.get("/api/health", (req, res) => {
+  const config = getAiConfig();
   res.json({
     ok: true,
-    model: GEMINI_MODEL,
-    geminiConfigured: hasConfiguredGeminiKey(),
+    provider: config.provider,
+    model: config.model,
+    aiConfigured: hasConfiguredApiKey(),
   });
 });
 
 app.post("/api/chat", async (req, res) => {
   const prompt = typeof req.body?.prompt === "string" ? req.body.prompt.trim() : "";
+  const config = getAiConfig();
 
   if (!prompt) {
     return res.status(400).json({ error: "Prompt is required." });
   }
 
-  if (!hasConfiguredGeminiKey()) {
+  if (!hasConfiguredApiKey()) {
     return res.status(500).json({
-      error: "Gemini API key is missing on the server.",
-      details: "Set GEMINI_API_KEY in FRBackend/.env or your host environment variables.",
+      error: "AI API key is missing on the server.",
+      details: `Set the ${config.provider === "groq" ? "GROQ_API_KEY" : "GEMINI_API_KEY"} environment variable on the backend.`,
+      provider: config.provider,
     });
   }
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": GEMINI_API_KEY,
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    );
-
-    const data = await response.json();
+    const { response, data } = config.provider === "groq"
+      ? await requestGroqChat(prompt, config)
+      : await requestGeminiChat(prompt, config);
 
     if (!response.ok) {
-      console.error("Gemini API Error:", JSON.stringify(data, null, 2));
+      console.error(`${config.provider.toUpperCase()} API Error:`, JSON.stringify(data, null, 2));
       return res.status(response.status).json({
-        error: "Gemini API failed",
+        error: `${config.provider} API failed`,
         details: data?.error || data,
+        provider: config.provider,
       });
     }
 
-    return res.json(data);
+    return res.json({
+      ...data,
+      provider: config.provider,
+      model: config.model,
+    });
   } catch (error) {
     console.error("Proxy Error:", error);
-    return res.status(500).json({ error: "Internal server error during chat." });
+    return res.status(500).json({
+      error: "Internal server error during chat.",
+      provider: config.provider,
+    });
   }
 });
 
@@ -182,7 +275,9 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
+  const config = getAiConfig();
   console.log(`Server running on http://localhost:${PORT}`);
   console.log(`Serving files from: ${projectRoot}`);
-  console.log(`Gemini model: ${GEMINI_MODEL}`);
+  console.log(`AI provider: ${config.provider}`);
+  console.log(`AI model: ${config.model}`);
 });

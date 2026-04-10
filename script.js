@@ -268,7 +268,23 @@ async function readJsonSafely(response) {
   }
 }
 
-function extractGeminiText(payload) {
+function extractModelText(payload) {
+  const groqContent = payload?.choices?.[0]?.message?.content;
+  if (typeof groqContent === "string" && groqContent.trim()) {
+    return groqContent.trim();
+  }
+
+  if (Array.isArray(groqContent)) {
+    return groqContent
+      .map((part) => {
+        if (typeof part === "string") return part;
+        if (typeof part?.text === "string") return part.text;
+        return "";
+      })
+      .join("")
+      .trim();
+  }
+
   return payload?.candidates?.[0]?.content?.parts
     ?.map((part) => part?.text || "")
     .join("")
@@ -278,8 +294,8 @@ function extractGeminiText(payload) {
 function getApiFailureMessage(error) {
   if (error?.message === "MISSING_BACKEND_CONFIGURATION") {
     return currentLanguage === "hi"
-      ? "AI setup अभी पूरा नहीं हुआ है। FRBackend/.env में Gemini key रखें और जरूरत हो तो site-config.js में backend URL सेट करें।"
-      : "AI setup is incomplete. Keep the Gemini key in FRBackend/.env and set a backend URL in site-config.js if needed.";
+      ? "AI setup अभी पूरा नहीं हुआ है। FRBackend/.env में API key रखें और जरूरत हो तो site-config.js में backend URL सेट करें।"
+      : "AI setup is incomplete. Keep the API key in FRBackend/.env and set a backend URL in site-config.js if needed.";
   }
 
   return currentLanguage === "hi"
@@ -302,7 +318,7 @@ async function requestGeminiViaProxy(prompt, apiUrl) {
     throw new Error(data?.details?.message || data?.error || "Proxy request failed");
   }
 
-  return extractGeminiText(data);
+  return extractModelText(data);
 }
 
 async function callGeminiAPI(prompt) {
@@ -315,7 +331,7 @@ async function callGeminiAPI(prompt) {
 
     return await requestGeminiViaProxy(prompt, apiUrl);
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
+    console.error("Error calling AI API:", error);
     return getApiFailureMessage(error);
   }
 }

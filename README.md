@@ -1,18 +1,24 @@
 # Furst Response Setup
 
-## Gemini key location
+## API key location
 
-Paste your Gemini API key only in:
+Paste your model provider key only in the backend `.env`.
+
+For Groq, use:
 
 - `FRBackend/.env`
 
-Use this line:
+Recommended variables:
 
-`GEMINI_API_KEY=PASTE_YOUR_REAL_KEY_HERE`
+`AI_PROVIDER=groq`
+
+`GROQ_API_KEY=PASTE_YOUR_REAL_KEY_HERE`
+
+`GROQ_MODEL=llama-3.3-70b-versatile`
 
 ## Local run
 
-1. Open `FRBackend/.env` and paste the key.
+1. Open `FRBackend/.env` and paste the key and model.
 2. From `FRBackend`, run `npm start`.
 3. Open `http://localhost:3000`.
 
@@ -28,4 +34,4 @@ Example:
 
 `backendBaseUrl: "https://your-backend.onrender.com"`
 
-The Gemini key still stays only in `FRBackend/.env` on that backend host.
+The API key still stays only in `FRBackend/.env` on that backend host.
