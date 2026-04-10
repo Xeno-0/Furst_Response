@@ -861,21 +861,15 @@ function createTranslatableElement(tagName, className, enText, hiText) {
 }
 
 function severityLabel(severity) {
-  if (currentLanguage === "hi") {
-    if (severity === "high") return localizedText("", "à¤…à¤¤à¥à¤¯à¤¾à¤µà¤¶à¥à¤¯à¤•: à¤¤à¥à¤°à¤‚à¤¤ à¤µà¥‡à¤Ÿ à¤¸à¥‡ à¤®à¤¿à¤²à¥‡à¤‚");
-    if (severity === "medium") return localizedText("", "à¤šà¤¿à¤‚à¤¤à¤¾à¤œà¤¨à¤•: à¤œà¤²à¥à¤¦ à¤µà¥‡à¤Ÿ à¤¸à¥‡ à¤®à¤¿à¤²à¥‡à¤‚");
-    return localizedText("", "à¤¨à¤¿à¤—à¤°à¤¾à¤¨à¥€: à¤˜à¤° à¤ªà¤° à¤¦à¥‡à¤–à¥‡à¤‚");
-  }
-
   if (severity === "high") {
-    return currentLanguage === "hi" ? "à¤…à¤¤à¥à¤¯à¤¾à¤µà¤¶à¥à¤¯à¤•: à¤¤à¥à¤°à¤‚à¤¤ à¤µà¥‡à¤Ÿ à¤¸à¥‡ à¤®à¤¿à¤²à¥‡à¤‚" : "URGENT: See vet immediately";
+    return currentLanguage === "hi" ? "अत्यावश्यक: तुरंत वेट से मिलें" : "URGENT: See vet immediately";
   }
 
   if (severity === "medium") {
-    return currentLanguage === "hi" ? "à¤šà¤¿à¤‚à¤¤à¤¾à¤œà¤¨à¤•: à¤œà¤²à¥à¤¦ à¤µà¥‡à¤Ÿ à¤¸à¥‡ à¤®à¤¿à¤²à¥‡à¤‚" : "CONCERNING: See vet soon";
+    return currentLanguage === "hi" ? "चिंताजनक: जल्द वेट से मिलें" : "CONCERNING: See vet soon";
   }
 
-  return currentLanguage === "hi" ? "à¤¨à¤¿à¤—à¤°à¤¾à¤¨à¥€: à¤˜à¤° à¤ªà¤° à¤¦à¥‡à¤–à¥‡à¤‚" : "MONITOR: Watch at home";
+  return currentLanguage === "hi" ? "निगरानी: घर पर देखें" : "MONITOR: Watch at home";
 }
 
 function buildCareActionCard({ severity, emergencyCaseId, summaryId, resume = false }) {
