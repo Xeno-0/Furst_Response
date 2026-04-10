@@ -390,7 +390,7 @@ Provide:
 
 Rules:
 - Respond in ${currentLanguage === "hi" ? "Hindi" : "English"}.
-- Keep the answer within 30-40 words.
+- Keep the answer within 40-50 words (atleast a likely cause and suggested solution).
 - Do not use bold formatting.
 - Mention emergency care immediately if the case seems urgent.
 - End exactly with [Severity: low], [Severity: medium], or [Severity: high].`;
