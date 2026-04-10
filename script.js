@@ -40,8 +40,80 @@ function safeJSONParse(value, fallback) {
   }
 }
 
+function isQuotaExceededError(error) {
+  if (!error) return false;
+  if (error instanceof DOMException) {
+    return (
+      error.name === "QuotaExceededError" ||
+      error.name === "NS_ERROR_DOM_QUOTA_REACHED" ||
+      error.code === 22 ||
+      error.code === 1014
+    );
+  }
+
+  return /quota/i.test(error.message || "");
+}
+
+function clearStorageForQuota(key) {
+  const keysToFree = [
+    STORAGE_KEYS.handoffHistory,
+    STORAGE_KEYS.emergencyCases,
+    STORAGE_KEYS.latestDiagnosis,
+    STORAGE_KEYS.passportStore,
+  ].filter((storageKey) => storageKey !== key);
+
+  keysToFree.forEach((storageKey) => {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (error) {
+      console.warn("Could not remove localStorage key during quota recovery:", storageKey, error);
+    }
+  });
+}
+
 function setStoredJSON(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  const payload = JSON.stringify(value);
+
+  try {
+    localStorage.setItem(key, payload);
+  } catch (error) {
+    if (!isQuotaExceededError(error)) {
+      throw error;
+    }
+
+    console.warn("LocalStorage quota exceeded for key:", key, error);
+    clearStorageForQuota(key);
+
+    try {
+      localStorage.setItem(key, payload);
+    } catch (retryError) {
+      console.warn("Retry after clearing storage failed for key:", key, retryError);
+      try {
+        localStorage.removeItem(key);
+      } catch (cleanupError) {
+        console.warn("Failed to cleanup localStorage key after quota failure:", key, cleanupError);
+      }
+    }
+  }
+}
+
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    if (!isQuotaExceededError(error)) {
+      throw error;
+    }
+
+    console.warn("LocalStorage quota exceeded for key:", key, error);
+    clearStorageForQuota(key);
+
+    try {
+      localStorage.setItem(key, value);
+    } catch (retryError) {
+      console.warn("Retry after clearing storage failed for key:", key, retryError);
+    }
+  }
 }
 
 function getTimestamp() {
@@ -548,7 +620,7 @@ function saveSummary(summary, options = { setActive: true }) {
   setStoredJSON(STORAGE_KEYS.handoffHistory, existing.slice(0, MAX_SUMMARY_HISTORY));
 
   if (options.setActive !== false) {
-    localStorage.setItem(STORAGE_KEYS.latestSummaryId, summary.id);
+    safeSetItem(STORAGE_KEYS.latestSummaryId, summary.id);
   }
 
   return summary;
@@ -587,7 +659,7 @@ function saveEmergencyCase(caseData, options = { setActive: true }) {
   setStoredJSON(STORAGE_KEYS.emergencyCases, existing.slice(0, MAX_EMERGENCY_HISTORY));
 
   if (options.setActive !== false) {
-    localStorage.setItem(STORAGE_KEYS.latestEmergencyCaseId, caseData.id);
+    safeSetItem(STORAGE_KEYS.latestEmergencyCaseId, caseData.id);
   }
 
   return caseData;
